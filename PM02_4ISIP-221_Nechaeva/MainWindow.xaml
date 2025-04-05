@@ -1,0 +1,104 @@
+﻿<Window x:Class="PM02_4ISIP_221_Nechaeva.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Приложение для решения задачи линейного программирования симплекс-методом" Height="600" Width="800">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Настройки задачи -->
+        <GroupBox Grid.Row="0" Header="Настройки задачи">
+            <StackPanel Orientation="Horizontal">
+                <RadioButton x:Name="rbMaximize" Content="Максимизация" Margin="5" IsChecked="True"/>
+                <RadioButton x:Name="rbMinimize" Content="Минимизация" Margin="5"/>
+
+                <TextBlock Text="Переменные:" VerticalAlignment="Center" Margin="10,0,5,0"/>
+                <TextBox x:Name="tbVariables" Width="50" Text="3"/>
+
+                <TextBlock Text="Ограничения:" VerticalAlignment="Center" Margin="10,0,5,0"/>
+                <TextBox x:Name="tbConstraints" Width="50" Text="2"/>
+
+                <Button Content="Создать" Margin="10,0,0,0" Padding="10,2" Click="BtnCreate_Click"/>
+            </StackPanel>
+        </GroupBox>
+
+        <!-- Целевая функция -->
+        <GroupBox Grid.Row="1" Header="Целевая функция">
+            <ItemsControl x:Name="objectiveFunctionItems">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <TextBlock Text="{Binding Variable}" VerticalAlignment="Center"/>
+                            <TextBox Text="{Binding Coefficient}" Width="50" Margin="5,0"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </GroupBox>
+
+        <!-- Ограничения -->
+        <GroupBox Grid.Row="2" Header="Ограничения">
+            <ItemsControl x:Name="constraintsItems">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="LightGray" BorderThickness="0,0,0,1" Padding="0,5">
+                            <StackPanel Orientation="Horizontal">
+                                <ItemsControl ItemsSource="{Binding Coefficients}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal" Margin="5">
+                                                <TextBlock Text="{Binding Variable}" VerticalAlignment="Center"/>
+                                                <TextBox Text="{Binding Coefficient}" Width="50" Margin="5,0"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                                <ComboBox SelectedIndex="{Binding Inequality}" Margin="5" Width="50">
+                                    <ComboBoxItem Content="≤"/>
+                                    <ComboBoxItem Content="="/>
+                                    <ComboBoxItem Content="≥"/>
+                                </ComboBox>
+
+                                <TextBox Text="{Binding RightHandSide}" Width="50" Margin="5,0"/>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </GroupBox>
+
+        <!-- Результаты -->
+        <GroupBox Grid.Row="3" Header="Результаты">
+            <TabControl>
+                <TabItem Header="Решение">
+                    <TextBox x:Name="txtSolution" IsReadOnly="True" TextWrapping="Wrap" 
+                             VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
+                </TabItem>
+                <TabItem Header="Подробности">
+                    <TextBox x:Name="txtDetails" IsReadOnly="True" TextWrapping="Wrap" 
+                             VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
+                </TabItem>
+            </TabControl>
+        </GroupBox>
+
+        <!-- Кнопка решения -->
+        <Button Grid.Row="4" Content="Решить задачу" HorizontalAlignment="Right" 
+                Padding="20,5" Click="BtnSolve_Click"/>
+    </Grid>
+</Window>
